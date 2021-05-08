@@ -1,6 +1,7 @@
 import * as PIXI from 'pixi.js';
 import GameManager from "./GameManager";
 import Scene from "./Scene";
+import Fade from '../transition/Fade';
 
 export default class FirstScene extends Scene {
   private text!: PIXI.Text;
@@ -18,6 +19,8 @@ export default class FirstScene extends Scene {
     this.text.position.set(renderer.width * 0.5, renderer.height * 0.5);
     this.text.on('pointerdown', this.nextScene);
     this.addChild(this.text);
+    this.transitionIn = new Fade(1.0, 0.0, -0.01);
+    this.transitionOut = new Fade(0.0, 1.0, 0.01);
   }
 
   public update(dt: number): void {

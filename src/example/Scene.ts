@@ -1,4 +1,6 @@
 import * as PIXI from 'pixi.js';
+import Transition from '../interfaces/Transition';
+import Immediate from '../transition/Immediate';
 import UpdateObject from '../interfaces/UpdateObject';
 
 export default abstract class Scene extends PIXI.Container {
