@@ -6,6 +6,7 @@ import UpdateObject from '../interfaces/UpdateObject';
 export default abstract class Scene extends PIXI.Container {
   protected transitionIn: Transition = new Immediate();
   protected transitionOut: Transition = new Immediate();
+  protected objectsToUpdate: UpdateObject[] = [];
   // メインループ
   public update(delta: number): void {
     // this.updateRegisteredObjects(delta);
@@ -18,11 +19,23 @@ export default abstract class Scene extends PIXI.Container {
 
   // メインループで更新を行うべきオブジェクトの登録
   protected registerUpdateObject(object: UpdateObject): void {
-    console.log(object)
+    this.objectsToUpdate.push(object);
   }
+
   // 登録されたオブジェクトのフレーム更新
   protected updateRegisteredObjects(delta: number): void {
-    console.log(delta)
+    const nextObjectsToUpdate = [];
+
+    for (let i = 0; i < this.objectsToUpdate.length; i++) {
+      const obj = this.objectsToUpdate[i];
+      if (!obj || obj.isDestroyed()) {
+        continue;
+      }
+      obj.update(delta);
+      nextObjectsToUpdate.push(obj);
+    }
+
+    this.objectsToUpdate = nextObjectsToUpdate;
   }
   // シーン開始トランジション
   // 引数はトランジション終了時のコールバック
