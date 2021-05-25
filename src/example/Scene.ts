@@ -1,7 +1,9 @@
 import * as PIXI from 'pixi.js';
-import Transition from '../interfaces/Transition';
 import Immediate from '../transition/Immediate';
+// interfaces
 import UpdateObject from '../interfaces/UpdateObject';
+import Transition from '../interfaces/Transition';
+import LoaderAddParam from '../interfaces/LoaderAddParam';
 
 export default abstract class Scene extends PIXI.Container {
   protected transitionIn: Transition = new Immediate();
@@ -59,5 +61,9 @@ export default abstract class Scene extends PIXI.Container {
       this.addChild(container);
     }
     this.transitionOut.begin();
+  }
+
+  protected createInitialResourceList(): (LoaderAddParam | string)[] {
+    return [];
   }
 }
