@@ -9,6 +9,7 @@ export default abstract class Scene extends PIXI.Container {
   protected transitionIn: Transition = new Immediate();
   protected transitionOut: Transition = new Immediate();
   protected objectsToUpdate: UpdateObject[] = [];
+  protected loader = new PIXI.Loader()
   // メインループ
   public update(delta: number): void {
     // this.updateRegisteredObjects(delta);
@@ -65,5 +66,50 @@ export default abstract class Scene extends PIXI.Container {
 
   protected createInitialResourceList(): (LoaderAddParam | string)[] {
     return [];
+  }
+
+  // execute the flow which downloads resources
+  public beginLoadResource(onLoaded: () => void): Promise<void> {
+    return new Promise(resolve => {
+      this.loadInitialResource(() => resolve(null))
+    }).then(() => {
+      onLoaded();
+    }).then(() => {
+      this.onResourceLoaded();
+    })
+  }
+
+  // download the indecated initial resources
+  public loadInitialResource(onLoaded: () => void): void {
+    const assets = this.createInitialResourceList();
+    const filteredAssets = this.filterLoadedAssets(assets);
+
+    if (filteredAssets.length > 0) {
+      this.loader.add(filteredAssets).load(() => onLoaded());
+    } else {
+      onLoaded();
+    }
+  }
+
+  // callback after loaded the resources
+  protected onResourceLoaded(): void {
+  }
+
+  // filtering the assets which has been already downloaded.
+  private filterLoadedAssets(assets: (LoaderAddParam | string)[]): LoaderAddParam[] {
+    const assetMap = new Map<string, LoaderAddParam>();
+
+    for (let i = 0; i < assets.length; i++) {
+      const asset = assets[i];
+      if (typeof asset === 'string') {
+        if (!this.loader.resources[asset] && !assetMap.has(asset)) {
+          assetMap.set(asset, { name: asset, url: asset })
+        } 
+      } else if (this.loader.resources[asset.name] && !assetMap.has(asset.name)) {
+        assetMap.set(asset.name, asset)
+      }
+    }
+
+    return Array.from(assetMap.values());
   }
 }
