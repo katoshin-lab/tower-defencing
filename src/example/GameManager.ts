@@ -30,12 +30,16 @@ export default class GameManager {
   }
 
   private sceneTransitionOutFinished: boolean = true;
+  private sceneResourceLoaded: boolean = true;
   private currentScene?: Scene;
 
   // 可能であれば新しいシーンのトランジションを開始
   public static transitionInIfPossible(newScene: Scene): boolean {
     const instance = GameManager.instance;
-    if (!instance.sceneTransitionOutFinished) {
+    if ( !instance.sceneTransitionOutFinished) {
+      return false;
+    }
+    if (!instance.sceneResourceLoaded || !instance.sceneTransitionOutFinished) {
       return false;
     }
     if (instance.currentScene) {
@@ -60,7 +64,10 @@ export default class GameManager {
       });
     } else {
       instance.sceneTransitionOutFinished = true;
-      GameManager.transitionInIfPossible(newScene);
+      newScene.beginLoadResource(() => {
+        instance.sceneResourceLoaded = true;
+        GameManager.transitionInIfPossible(newScene);
+      })
     }
   }
 }
