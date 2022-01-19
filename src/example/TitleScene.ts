@@ -1,7 +1,8 @@
 import * as PIXI from 'pixi.js';
 import Scene from "./Scene";
-import Fade from '../transition/Fade';
+import Fade from 'transition/Fade';
 import GameManager from './GameManager';
+import LoaderAddParam from 'interfaces/LoaderAddParam';
 
 export default class TitleScene extends Scene {
   private text!: PIXI.Text;
@@ -24,6 +25,20 @@ export default class TitleScene extends Scene {
     this.addChild(this.text);
 
     this.interactive = true;
-    // this.on('pointerup', () => this.showOrderScene);
+    this.on('pointerup', () => this.showOrderScene);
+  }
+
+  protected createInitialResourceList(): (LoaderAddParam | string)[] {
+    const assets = super.createInitialResourceList();
+    // assets
+    return assets;
+  }
+
+  protected onResourceLoaded(): void {
+    super.onResourceLoaded();
+  }
+
+  public showOrderScene(): void {
+    console.log("should go to order scene");
   }
 }
