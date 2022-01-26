@@ -1,5 +1,5 @@
 import * as PIXI from 'pixi.js';
-import GameManager from '../example/GameManager';
+import GameManager from '../manager/GameManager';
 import Transition from '../interfaces/Transition'
 
 export default class Fade implements Transition {

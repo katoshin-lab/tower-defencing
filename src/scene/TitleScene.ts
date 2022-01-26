@@ -1,8 +1,9 @@
 import * as PIXI from 'pixi.js';
 import Scene from "./Scene";
-import Fade from 'transition/Fade';
-import GameManager from '../example/GameManager';
+import Fade from '../transition/Fade';
+import GameManager from '../manager/GameManager';
 import LoaderAddParam from 'interfaces/LoaderAddParam';
+import { Resource } from '../Resources';
 
 export default class TitleScene extends Scene {
   private text!: PIXI.Text;
@@ -29,8 +30,11 @@ export default class TitleScene extends Scene {
   }
 
   protected createInitialResourceList(): (LoaderAddParam | string)[] {
-    const assets = super.createInitialResourceList();
-    // assets
+    let assets = super.createInitialResourceList();
+    const staticResource = Resource.static;
+    assets = assets.concat(staticResource.BattleBgFores.slice(0, 3));
+    assets = assets.concat(staticResource.BattleBgMiddles.slice(0, 3));
+    assets = assets.concat(staticResource.BattleBgBacks.slice(0, 3));
     return assets;
   }
 

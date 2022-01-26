@@ -1,5 +1,5 @@
 import * as PIXI from 'pixi.js';
-import GameManager from "../example/GameManager";
+import GameManager from "../manager/GameManager";
 import Scene from "./Scene";
 import Fade from '../transition/Fade';
 import SecondScene from './SecondScene';

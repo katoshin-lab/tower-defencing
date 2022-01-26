@@ -1,5 +1,6 @@
-import FirstScene from "./scene/FirstScene"
-import GameManager from "./example/GameManager"
+import GameManager from "./manager/GameManager";
+import TitleScene from "./scene/TitleScene";
+import './config';
 
 window.onload = () => {
   GameManager.start({
@@ -7,5 +8,5 @@ window.onload = () => {
     glHeight: 640,
     backgroundColor: 0x222222
   })
-  GameManager.loadScene(new FirstScene());
+  GameManager.loadScene(new TitleScene());
 }

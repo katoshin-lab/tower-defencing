@@ -2,7 +2,7 @@ import * as PIXI from 'pixi.js';
 // types
 import { PixiApplicationOptions } from '../types/pixi';
 import Scene from '../scene/Scene'
-import { Config } from 'config';
+import Config from '../config';
 
 export default class GameManager {
   public static instance: GameManager;
@@ -19,6 +19,7 @@ export default class GameManager {
 
   public static start({ ...params }: PixiApplicationOptions): void {
     const game = new PIXI.Application({ width: params.glWidth, height: params.glHeight, ...params });
+    game.loader.baseUrl = Config.ResourceBaseUrl;
     GameManager.instance = new GameManager(game);
 
     document.body.appendChild(game.view);
