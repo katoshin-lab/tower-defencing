@@ -1,4 +1,4 @@
-import FirstScene from "./example/FirstScene"
+import FirstScene from "./scene/FirstScene"
 import GameManager from "./example/GameManager"
 
 window.onload = () => {

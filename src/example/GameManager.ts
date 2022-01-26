@@ -1,8 +1,8 @@
 import * as PIXI from 'pixi.js';
 // types
 import { PixiApplicationOptions } from '../types/pixi';
-import Scene from './Scene'
-
+import Scene from '../scene/Scene'
+import { Config } from 'config';
 
 export default class GameManager {
   public static instance: GameManager;

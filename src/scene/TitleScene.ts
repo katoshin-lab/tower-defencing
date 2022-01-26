@@ -1,7 +1,7 @@
 import * as PIXI from 'pixi.js';
 import Scene from "./Scene";
 import Fade from 'transition/Fade';
-import GameManager from './GameManager';
+import GameManager from '../example/GameManager';
 import LoaderAddParam from 'interfaces/LoaderAddParam';
 
 export default class TitleScene extends Scene {
