@@ -40,6 +40,39 @@ export default class TitleScene extends Scene {
 
   protected onResourceLoaded(): void {
     super.onResourceLoaded();
+    const resources = GameManager.instance.game.loader.resources;
+    const bgOrder = [
+      ...Resource.static.BattleBgBacks,
+      ...Resource.static.BattleBgMiddles,
+      ...Resource.static.BattleBgFores
+    ]
+
+    GameManager.instance.game.loader.add(bgOrder)
+    .load(() => {
+      for (let i = 0; i < bgOrder.length; i++) {
+        console.log(resources, bgOrder[i])
+        const sprite = new PIXI.Sprite(resources[bgOrder[i]].texture);
+        sprite.position.set(sprite.width * i, 0);
+        this.addChild(sprite);
+      }
+    })
+
+    const renderer = GameManager.instance.game.renderer;
+
+    this.text = new PIXI.Text('TOUCH TO START', new PIXI.TextStyle({
+      fontSize: 64,
+      fill: 0xffffff
+    }))
+    this.text.anchor.set(0.5, 0.5);
+    this.text.position.set(renderer.width * 0.5, renderer.height * 0.5);
+    this.addChild(this.text);
+
+    this.interactive = true;
+    this.on('pointerup', () => this.showOrderScene());
+  }
+
+  protected setup(name: string): PIXI.Sprite {
+    return new PIXI.Sprite(GameManager.instance.game.loader.resources[name].texture);
   }
 
   public showOrderScene(): void {
