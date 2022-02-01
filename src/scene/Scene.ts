@@ -4,12 +4,13 @@ import Immediate from '../transition/Immediate';
 import UpdateObject from '../interfaces/UpdateObject';
 import Transition from '../interfaces/Transition';
 import LoaderAddParam from '../interfaces/LoaderAddParam';
+import Config from '../config';
 
 export default abstract class Scene extends PIXI.Container {
   protected transitionIn: Transition = new Immediate();
   protected transitionOut: Transition = new Immediate();
   protected objectsToUpdate: UpdateObject[] = [];
-  protected loader = new PIXI.Loader()
+  protected loader = new PIXI.Loader();
   // メインループ
   public update(delta: number): void {
     // this.updateRegisteredObjects(delta);
@@ -81,6 +82,7 @@ export default abstract class Scene extends PIXI.Container {
 
   // download the indecated initial resources
   public loadInitialResource(onLoaded: () => void): void {
+    this.loader.baseUrl = Config.ResourceBaseUrl;
     const assets = this.createInitialResourceList();
     const filteredAssets = this.filterLoadedAssets(assets);
 
