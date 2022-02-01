@@ -13,20 +13,6 @@ export default class TitleScene extends Scene {
     
     this.transitionIn = new Fade(1.0, 0.0, -0.02);
     this.transitionOut = new Fade(0.0, 1.0, 0.02);
-
-    const renderer = GameManager.instance.game.renderer;
-    const textStyle = {
-      fontSize: 64,
-      fill: 0xffffff
-    }
-
-    this.text = new PIXI.Text('TOUCH TO START', new PIXI.TextStyle(textStyle));
-    this.text.anchor.set(0.5, 0.5);
-    this.position.set(renderer.width * 0.5, renderer.height * 0.5);
-    this.addChild(this.text);
-
-    this.interactive = true;
-    this.on('pointerup', () => this.showOrderScene);
   }
 
   protected createInitialResourceList(): (LoaderAddParam | string)[] {
@@ -40,29 +26,29 @@ export default class TitleScene extends Scene {
 
   protected onResourceLoaded(): void {
     super.onResourceLoaded();
-    const resources = GameManager.instance.game.loader.resources;
+    const resources = this.loader.resources;
     const bgOrder = [
-      ...Resource.static.BattleBgBacks,
-      ...Resource.static.BattleBgMiddles,
-      ...Resource.static.BattleBgFores
+      Resource.static.BattleBgBacks,
+      Resource.static.BattleBgMiddles,
+      Resource.static.BattleBgFores
     ]
 
-    GameManager.instance.game.loader.add(bgOrder)
-    .load(() => {
-      for (let i = 0; i < bgOrder.length; i++) {
-        console.log(resources, bgOrder[i])
-        const sprite = new PIXI.Sprite(resources[bgOrder[i]].texture);
-        sprite.position.set(sprite.width * i, 0);
+
+    for (let i = 0; i < bgOrder.length; i++) {
+      const bgs = bgOrder[i];
+      for (let j = 0; j < 3; j++) {
+        const sprite = new PIXI.Sprite(resources[bgs[j]].texture);
+        sprite.position.set(sprite.width * j, 0);
         this.addChild(sprite);
-      }
-    })
+      };
+    };
 
     const renderer = GameManager.instance.game.renderer;
 
     this.text = new PIXI.Text('TOUCH TO START', new PIXI.TextStyle({
       fontSize: 64,
       fill: 0xffffff
-    }))
+    }));
     this.text.anchor.set(0.5, 0.5);
     this.text.position.set(renderer.width * 0.5, renderer.height * 0.5);
     this.addChild(this.text);
