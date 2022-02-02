@@ -30,7 +30,6 @@ export default class GameManager {
     })
   }
 
-  // a
   private sceneTransitionOutFinished: boolean = true;
   private sceneResourceLoaded: boolean = true;
   private currentScene?: Scene;
