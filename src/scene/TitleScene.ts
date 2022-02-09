@@ -21,6 +21,7 @@ export default class TitleScene extends Scene {
     assets = assets.concat(staticResource.BattleBgFores.slice(0, 3));
     assets = assets.concat(staticResource.BattleBgMiddles.slice(0, 3));
     assets = assets.concat(staticResource.BattleBgBacks.slice(0, 3));
+    assets.push(Resource.Audio.Bgm.Title);
     return assets;
   }
 
