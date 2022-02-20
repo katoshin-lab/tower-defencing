@@ -38,6 +38,25 @@ export default class SoundManager {
   }
 
   public static setSoundInitializeEvent(browser: BrowserInfo | BotInfo | NodeInfo | SearchBotDeviceInfo | ReactNativeInfo): void {
-    console.log(browser)
+    const eventName = (document.ontouchend === undefined) ? 'mousedown' : 'touchend';
+    let soundInitializer: () => void;
+
+    const majorVersion = browser.version ? browser.version.split('.')[0] : '0';
+
+    if (browser.name === 'chrome' && Number.parseInt(majorVersion, 10) >= 66) {
+      soundInitializer = () => {
+        if (SoundManager.sharedContext) {
+          SoundManager.sharedContext.resume();
+        }
+        document.body.removeEventListener(eventName, soundInitializer);
+      }
+    } else if (browser.name === 'safari') {
+      console.log('safari');
+      soundInitializer = () => null;
+    } else {
+      return;
+    }
+
+    document.body.addEventListener(eventName, soundInitializer)
   }
 }
