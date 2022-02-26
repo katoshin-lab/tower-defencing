@@ -51,8 +51,17 @@ export default class SoundManager {
         document.body.removeEventListener(eventName, soundInitializer);
       }
     } else if (browser.name === 'safari') {
-      console.log('safari');
-      soundInitializer = () => null;
+      soundInitializer = () => {
+        if (SoundManager.sharedContext) {
+          const silentSource = SoundManager.sharedContext.createBufferSource();
+          silentSource.buffer = SoundManager.sharedContext.createBuffer(1, 1, 44100);
+          silentSource.connect(SoundManager.sharedContext.destination);
+          silentSource.start(0);
+          silentSource.disconnect();
+        }
+        document.body.removeEventListener(eventName, soundInitializer);
+      };
+
     } else {
       return;
     }
