@@ -3,6 +3,7 @@ import * as PIXI from 'pixi.js';
 import { PixiApplicationOptions } from '../types/pixi';
 import Scene from '../scene/Scene'
 import Config from '../config';
+import SoundManager from './SoundManager';
 
 export default class GameManager {
   public static instance: GameManager;
@@ -21,6 +22,8 @@ export default class GameManager {
     const game = new PIXI.Application({ width: params.glWidth, height: params.glHeight, ...params });
     game.loader.baseUrl = Config.ResourceBaseUrl;
     GameManager.instance = new GameManager(game);
+
+    SoundManager.init();
 
     document.body.appendChild(game.view);
     game.ticker.add((delta: number) => {
