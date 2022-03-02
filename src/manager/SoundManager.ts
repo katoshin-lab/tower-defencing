@@ -1,5 +1,6 @@
-import { BrowserInfo, BotInfo, NodeInfo, detect, SearchBotDeviceInfo, ReactNativeInfo } from "detect-browser";
-
+import * as PIXI from 'pixi.js';
+import { detect } from "detect-browser";
+import { Browser } from '../types/browser';
 export default class SoundManager {
   public static instance: SoundManager;
 
@@ -8,6 +9,9 @@ export default class SoundManager {
   }
 
   private static context: AudioContext | null = null;
+  private static webAudioInitialized: boolean = false;
+
+  private static readonly supportedExtensions = ['mp3'];
 
   constructor() {
     if (SoundManager.instance) {
@@ -19,7 +23,7 @@ export default class SoundManager {
     if (SoundManager.instance) {
       return;
     }
-    
+
     SoundManager.instance = new SoundManager();
 
     if (ctx) {
@@ -35,9 +39,10 @@ export default class SoundManager {
     }
 
     SoundManager.setSoundInitializeEvent(browser);
+    SoundManager.useWebAudio(browser);
   }
 
-  public static setSoundInitializeEvent(browser: BrowserInfo | BotInfo | NodeInfo | SearchBotDeviceInfo | ReactNativeInfo): void {
+  public static setSoundInitializeEvent(browser: Browser): void {
     const eventName = (document.ontouchend === undefined) ? 'mousedown' : 'touchend';
     let soundInitializer: () => void;
 
@@ -67,5 +72,30 @@ export default class SoundManager {
     }
 
     document.body.addEventListener(eventName, soundInitializer)
+  }
+
+  public static useWebAudio(browser: Browser): void {
+    if (SoundManager.webAudioInitialized) {
+      return;
+    }
+
+    const supportedExtensions = SoundManager.supportedExtensions;
+
+    for (let i = 0; i < supportedExtensions.length; i++) {
+      const extension = supportedExtensions[i];
+      const PixiResource = PIXI.LoaderResource;
+      PixiResource.setExtensionXhrType(
+        extension,
+        PixiResource.XHR_RESPONSE_TYPE.BUFFER
+      );
+      PixiResource.setExtensionLoadType(
+        extension,
+        PixiResource.LOAD_TYPE.XHR
+      );
+    }
+
+    console.log(browser)
+
+    SoundManager.webAudioInitialized = true;
   }
 }
