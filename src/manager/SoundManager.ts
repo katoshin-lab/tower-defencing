@@ -94,7 +94,11 @@ export default class SoundManager {
       );
     }
 
-    console.log(browser)
+    const majorVersion = browser.version ? browser.version.split('.')[0] : '0';
+    let methodName = 'decodeAudio';
+    if (browser.name === 'chrome' && Number.parseInt(majorVersion, 10) === 64) {
+      methodName = 'decodeAudioWithPrimomise';
+    }
 
     SoundManager.webAudioInitialized = true;
   }
